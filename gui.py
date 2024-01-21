@@ -6,7 +6,7 @@ from PIL import Image
 from investiments import Investments
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -21,8 +21,8 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
 
         # load images with light and dark mode image
-        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
-        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "logo.png")), size=(26, 26))
+        self.image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
+        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(self.image_path, "light_logo.png")), size=(26, 26))
         
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -104,6 +104,10 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("available_invests")
 
     def change_appearance_mode_event(self, new_appearance_mode: str):
+        reverse_logo = "light" if new_appearance_mode.lower() == "dark" else "dark" 
+        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(self.image_path, f"{reverse_logo}_logo.png")), size=(26, 26))
+        self.navigation_frame_label.configure(image=self.logo_image)
+        self.navigation_frame_label.image = self.logo_image
         customtkinter.set_appearance_mode(new_appearance_mode)
 
     def select_frame_by_name(self, name):
